@@ -2,8 +2,6 @@ package main
 
 import (
 	"./rpclib"
-	"errors"
-	"fmt"
 	"log"
 	"net"
 	"net/rpc"
@@ -14,35 +12,98 @@ type Handler struct {
 	calc rpclib.Calculator
 }
 
-func (handler *Handler) Call(obj *rpclib.RPCObj, replay *rpclib.ReplyObj) error {
+func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 
-	replay.ID = obj.ID
-
+	reply.ID = obj.ID
+	var err error
 	switch obj.Method {
 	case "create":
 		if len(obj.Params) != 2 {
-			return errors.New("wrong Params")
+			reply.Error = "wrong Params"
 		}
-		replay.Result = "create varialbe success"
-		return handler.calc.Create(&rpclib.Pair{obj.Params[0], obj.Params[1]})
+
+		err = handler.calc.Create(&rpclib.Pair{obj.Params[0], obj.Params[1]})
+
+		if err != nil {
+			reply.Error = err.Error()
+		} else {
+			reply.Result = "create varialbe success"
+		}
+
 	case "updating":
 		if len(obj.Params) != 2 {
-			return errors.New("wrong Params")
+			reply.Error = "wrong Params"
 		}
-		replay.Result = "update varialbe success"
-		return handler.calc.Update(&rpclib.Pair{obj.Params[0], obj.Params[1]})
+
+		err = handler.calc.Update(&rpclib.Pair{obj.Params[0], obj.Params[1]})
+
+		if err != nil {
+			reply.Error = err.Error()
+		} else {
+			reply.Result = "update varialbe success"
+		}
 	case "delete":
 		if len(obj.Params) != 1 {
-			return errors.New("wrong Params")
+			reply.Error = "wrong Params"
 		}
-		replay.Result = "delete varialbe success"
-		return handler.calc.Delete(obj.Params[0])
+
+		err = handler.calc.Delete(obj.Params[0])
+
+		if err != nil {
+			reply.Error = err.Error()
+		} else {
+			reply.Result = "delete varialbe success"
+		}
 	case "addition":
+		if len(obj.Params) != 2 {
+			reply.Error = "wrong Params"
+		}
+
+		value, err := handler.calc.DoCal(&rpclib.Pair{obj.Params[0], obj.Params[1]}, "add")
+
+		if err != nil {
+			reply.Error = err.Error()
+		} else {
+			reply.Result = value.String()
+		}
 	case "subtraction":
+		if len(obj.Params) != 2 {
+			reply.Error = "wrong Params"
+		}
+
+		value, err := handler.calc.DoCal(&rpclib.Pair{obj.Params[0], obj.Params[1]}, "sub")
+
+		if err != nil {
+			reply.Error = err.Error()
+		} else {
+			reply.Result = value.String()
+		}
 	case "multiplication":
+		if len(obj.Params) != 2 {
+			reply.Error = "wrong Params"
+		}
+
+		value, err := handler.calc.DoCal(&rpclib.Pair{obj.Params[0], obj.Params[1]}, "mul")
+
+		if err != nil {
+			reply.Error = err.Error()
+		} else {
+			reply.Result = value.String()
+		}
 	case "division":
+		if len(obj.Params) != 2 {
+			reply.Error = "wrong Params"
+		}
+
+		value, err := handler.calc.DoCal(&rpclib.Pair{obj.Params[0], obj.Params[1]}, "div")
+
+		if err != nil {
+			reply.Error = err.Error()
+		} else {
+			reply.Result = value.String()
+		}
 	default:
-		return errors.New("no such method")
+		reply.Error = "no such mehtod"
 	}
 	return nil
 }
