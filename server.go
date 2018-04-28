@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"sync"
 )
 
 type Handler struct {
@@ -113,7 +114,10 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 func main() {
 
 	portNum := flag.Int("port", 1234, "server port, defualt is 1234")
+	mutex := sync.Mutex{}
+
 	flag.Parse()
+
 	if *portNum < 1000 || *portNum > 65535 {
 		fmt.Println("invliad port, use default port 1234")
 		*portNum = 1234
@@ -123,8 +127,8 @@ func main() {
 
 	handler := new(Handler)
 	handler.calc.Init()
-	server := rpc.NewServer()
 
+	server := rpc.NewServer()
 	server.Register(handler)
 	server.HandleHTTP(rpc.DefaultRPCPath, rpc.DefaultDebugPath)
 
@@ -139,6 +143,11 @@ func main() {
 		if err != nil {
 			log.Fatal(err.Error())
 		}
-		go server.ServeCodec(jsonrpc.NewServerCodec(conn))
+
+		go func() {
+			mutex.Lock()
+			server.ServeCodec(jsonrpc.NewServerCodec(conn))
+			mutex.Unlock()
+		}()
 	}
 }
