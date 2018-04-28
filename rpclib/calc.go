@@ -1,4 +1,4 @@
-package main
+package rpclib
 
 import (
 	"errors"
@@ -14,6 +14,9 @@ type Calculator struct {
 	Variable map[string]*big.Float
 }
 
+func (calc *Calculator) Init() {
+	calc.Variable = make(map[string]*big.Float)
+}
 func (calc *Calculator) Create(pair *Pair) error {
 	value, _, err := big.ParseFloat(pair.B, 10, 80, big.ToZero)
 
