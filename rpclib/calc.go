@@ -84,12 +84,12 @@ func (calc *Calculator) DoCal(pair *Pair, method string) (*big.Float, error) {
 	switch method {
 	case "add":
 		return result.Add(a, b), nil
-	case "subtract":
+	case "sub":
 		return result.Sub(a, b), nil
-	case "multiply":
+	case "mul":
 		return result.Mul(a, b), nil
 	case "div":
-		return result.Mul(a, b), nil
+		return result.Quo(a, b), nil
 	default:
 		return result, errors.New("no such method")
 	}
@@ -99,6 +99,7 @@ func main() {
 	calc := Calculator{Variable: make(map[string]*big.Float)}
 
 	pair := &Pair{"test", "3.1415961231231231231231231123"}
+
 	//create test
 	err := calc.Create(pair)
 	if err != nil {
@@ -111,7 +112,6 @@ func main() {
 	fmt.Printf("test:{value:%v type:%T}\n", calc.Variable["test"], calc.Variable["test"])
 
 	//update test
-
 	pair = &Pair{"test", "123456678"}
 	err = calc.Update(pair)
 	if err != nil {
@@ -123,9 +123,32 @@ func main() {
 		fmt.Printf("%v\n", err)
 	}
 	fmt.Printf("test:{value:%v type:%T}\n", calc.Variable["test"], calc.Variable["test"])
+
 	//add
 	pair = &Pair{"test", "1234567"}
 	result, err := calc.DoCal(pair, "add")
+	if err != nil {
+		fmt.Printf("%v\n", err)
+	}
+	fmt.Printf("result: {value:%v, type:%T}\n", result, result)
+
+	//sub
+	pair = &Pair{"test", "1234567"}
+	result, err = calc.DoCal(pair, "sub")
+	if err != nil {
+		fmt.Printf("%v\n", err)
+	}
+	fmt.Printf("result: {value:%v, type:%T}\n", result, result)
+	//mul
+	pair = &Pair{"test", "1234567"}
+	result, err = calc.DoCal(pair, "mul")
+	if err != nil {
+		fmt.Printf("%v\n", err)
+	}
+	fmt.Printf("result: {value:%v, type:%T}\n", result, result)
+	//div
+	pair = &Pair{"test", "1234567"}
+	result, err = calc.DoCal(pair, "div")
 	if err != nil {
 		fmt.Printf("%v\n", err)
 	}
