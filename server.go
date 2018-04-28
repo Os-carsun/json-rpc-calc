@@ -2,6 +2,8 @@ package main
 
 import (
 	"./rpclib"
+	"flag"
+	"fmt"
 	"log"
 	"net"
 	"net/rpc"
@@ -110,6 +112,15 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 
 func main() {
 
+	portNum := flag.Int("port", 1234, "server port, defualt is 1234")
+	flag.Parse()
+	if *portNum < 1000 || *portNum > 65535 {
+		fmt.Println("invliad port, use default port 1234")
+		*portNum = 1234
+	}
+
+	fmt.Printf("server is run in port: %d\n", *portNum)
+
 	handler := new(Handler)
 	handler.calc.Init()
 	server := rpc.NewServer()
@@ -117,7 +128,7 @@ func main() {
 	server.Register(handler)
 	server.HandleHTTP(rpc.DefaultRPCPath, rpc.DefaultDebugPath)
 
-	l, e := net.Listen("tcp", ":1234")
+	l, e := net.Listen("tcp", fmt.Sprintf(":%d", *portNum))
 
 	if e != nil {
 		log.Fatal("listen error:", e)
