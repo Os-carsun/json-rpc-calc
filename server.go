@@ -22,7 +22,8 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 	switch obj.Method {
 	case "create":
 		if len(obj.Params) != 2 {
-			reply.Error = "wrong Params"
+			reply.Error = "create fail, wrong Params, need 2 Params"
+			break
 		}
 
 		err = handler.calc.Create(&rpclib.Pair{obj.Params[0], obj.Params[1]})
@@ -35,7 +36,8 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 
 	case "set":
 		if len(obj.Params) != 2 {
-			reply.Error = "wrong Params"
+			reply.Error = "set fail, wrong Params, need 2 Params"
+			break
 		}
 
 		err = handler.calc.Update(&rpclib.Pair{obj.Params[0], obj.Params[1]})
@@ -47,7 +49,8 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		}
 	case "delete":
 		if len(obj.Params) != 1 {
-			reply.Error = "wrong Params"
+			reply.Error = "delete fail, wrong Params, need 1 Params"
+			break
 		}
 
 		err = handler.calc.Delete(obj.Params[0])
@@ -59,7 +62,8 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		}
 	case "plus":
 		if len(obj.Params) != 2 {
-			reply.Error = "wrong Params"
+			reply.Error = "plus fail, wrong Params, need 2 Params"
+			break
 		}
 
 		value, err := handler.calc.DoCal(&rpclib.Pair{obj.Params[0], obj.Params[1]}, "add")
@@ -71,7 +75,8 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		}
 	case "minus":
 		if len(obj.Params) != 2 {
-			reply.Error = "wrong Params"
+			reply.Error = "minus fail, wrong Params, need 2 Params"
+			break
 		}
 
 		value, err := handler.calc.DoCal(&rpclib.Pair{obj.Params[0], obj.Params[1]}, "sub")
@@ -83,7 +88,8 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		}
 	case "multiply":
 		if len(obj.Params) != 2 {
-			reply.Error = "wrong Params"
+			reply.Error = "multiply fail, wrong Params, need 2 Params"
+			break
 		}
 
 		value, err := handler.calc.DoCal(&rpclib.Pair{obj.Params[0], obj.Params[1]}, "mul")
@@ -95,7 +101,8 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		}
 	case "divide":
 		if len(obj.Params) != 2 {
-			reply.Error = "wrong Params"
+			reply.Error = "divide fail, wrong Paramsm need 2 Params"
+			break
 		}
 
 		value, err := handler.calc.DoCal(&rpclib.Pair{obj.Params[0], obj.Params[1]}, "div")
