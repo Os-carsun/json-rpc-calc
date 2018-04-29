@@ -33,7 +33,7 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 			reply.Result = "create varialbe success"
 		}
 
-	case "updating":
+	case "set":
 		if len(obj.Params) != 2 {
 			reply.Error = "wrong Params"
 		}
@@ -57,7 +57,7 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		} else {
 			reply.Result = "delete varialbe success"
 		}
-	case "addition":
+	case "plus":
 		if len(obj.Params) != 2 {
 			reply.Error = "wrong Params"
 		}
@@ -69,7 +69,7 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		} else {
 			reply.Result = value.String()
 		}
-	case "subtraction":
+	case "minus":
 		if len(obj.Params) != 2 {
 			reply.Error = "wrong Params"
 		}
@@ -81,7 +81,7 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		} else {
 			reply.Result = value.String()
 		}
-	case "multiplication":
+	case "multiply":
 		if len(obj.Params) != 2 {
 			reply.Error = "wrong Params"
 		}
@@ -93,7 +93,7 @@ func (handler *Handler) Call(obj *rpclib.RPCObj, reply *rpclib.ReplyObj) error {
 		} else {
 			reply.Result = value.String()
 		}
-	case "division":
+	case "divide":
 		if len(obj.Params) != 2 {
 			reply.Error = "wrong Params"
 		}
