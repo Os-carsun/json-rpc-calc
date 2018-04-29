@@ -9,7 +9,7 @@ import (
 	"net/rpc/jsonrpc"
 )
 
-func create(serverIP *string, serverPort *int) {
+func asyncReq(serverIP *string, serverPort *int) {
 	client, err := net.DialTimeout("tcp", fmt.Sprintf("%v:%v", *serverIP, *serverPort), 1000*1000*1000*30)
 
 	if err != nil {
@@ -31,10 +31,10 @@ func create(serverIP *string, serverPort *int) {
 
 		log.Println("client\t-", "call create method")
 
-		divCall := c.Go("Handler.Call", request, &rpclib.ReplyObj{}, nil)
+		asyncCall := c.Go("Handler.Call", request, &rpclib.ReplyObj{}, nil)
 
 		go func(num int) {
-			reply := <-divCall.Done
+			reply := <- asyncCall.Done
 			obj := (reply.Reply).(*rpclib.ReplyObj)
 			log.Println("clent\t-", "recive response:{ ID: ", obj.ID, ", result: ", obj.Result, ", error:", obj.Error, "} id should be :", num)
 			endChan <- num
@@ -50,5 +50,5 @@ func main() {
 
 	serverIP := flag.String("IP", "127.0.0.1", "rpc serverIP, default is 127.0.0.1")
 	serverPort := flag.Int("port", 1234, "rpc port, default is 1234")
-	create(serverIP, serverPort)
+	asyncReq(serverIP, serverPort)
 }
