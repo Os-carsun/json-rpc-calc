@@ -36,7 +36,7 @@ func create(serverIP *string, serverPort *int) {
 		go func(num int) {
 			reply := <-divCall.Done
 			obj := (reply.Reply).(*rpclib.ReplyObj)
-			log.Println("clent\t-", "recive response", reply.Reply, obj, num)
+			log.Println("clent\t-", "recive response:{ ID: ", obj.ID, ", result: ", obj.Result, ", error:", obj.Error, "} id should be :", num)
 			endChan <- num
 		}(i)
 	}
